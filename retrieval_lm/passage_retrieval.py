@@ -193,12 +193,14 @@ class Retriever:
         else:
             print(f"Indexing passages from files {input_paths}")
             start_time_indexing = time.time()
-            self.index_encoded_data(self.index, input_paths, 1000000)
+            self.index_encoded_data(self.index, input_paths, 50000)
             print(f"Indexing time: {time.time()-start_time_indexing:.1f} s.")
 
         # load passages
         print("loading passages")
-        self.passages = src.data.load_passages(passages)
+        all_passages = src.data.load_passages(passages)
+        self.passages = all_passages[:200000] # Load only 200000 first passages
+        del all_passages
         self.passage_id_map = {x["id"]: x for x in self.passages}
         print("passages have been loaded")
 
