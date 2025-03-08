@@ -7,6 +7,10 @@ import argparse
 from vllm import LLM, SamplingParams
 from utils import TASK_INST, PROMPT_DICT, load_special_tokens, load_jsonlines, postprocess, fix_spacing
 
+# This will my edited part of the code to solve processing forking/spawning issues of CUDA
+import multiprocessing as mp
+
+mp.set_start_method("spawn", force=True)
 
 def run_step_generation_batch(model, prompt, paragraphs,  max_new_tokens,
                               rel_tokens=None, grd_tokens=None, ret_tokens=None, ut_tokens=None,
