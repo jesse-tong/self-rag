@@ -352,11 +352,15 @@ def main():
 
     if args.world_size is not None:
         model = LLM(model=args.model_name, download_dir=args.download_dir,
-                    dtype=args.dtype, tensor_parallel_size=args.world_size,)
+                    dtype=args.dtype, tensor_parallel_size=args.world_size,
+                    gpu_memory_utilization=0.95,
+                    max_model_len=1024)
 
     else:
         model = LLM(model=args.model_name,
-                    download_dir=args.download_dir, dtype=args.dtype)
+                    download_dir=args.download_dir, dtype=args.dtype,
+                    gpu_memory_utilization=0.95,
+                    max_model_len=1024)
 
     def generate(prompt, ctxs, max_new_tokens):
         processed_prompt = PROMPT_DICT["prompt_no_input"].format_map(

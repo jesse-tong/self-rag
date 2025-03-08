@@ -304,10 +304,14 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(gpt, padding_side="left")
     if args.dtype is not None:
         model = LLM(model=gpt, download_dir=args.download_dir,
-                    dtype=args.dtype, tensor_parallel_size=args.world_size,)
+                    dtype=args.dtype, tensor_parallel_size=args.world_size,
+                    gpu_memory_utilization=0.75,
+                    max_model_len=672)
     else:
         model = LLM(model=gpt, download_dir=args.download_dir,
-                    dtype=args.dtype, tensor_parallel_size=args.world_size,)
+                    dtype=args.dtype, tensor_parallel_size=args.world_size,
+                    gpu_memory_utilization=0.75,
+                    max_model_len=672)
 
     # Get token ids for reflection tokens.
     ret_tokens, rel_tokens, grd_tokens, ut_tokens = load_special_tokens(
