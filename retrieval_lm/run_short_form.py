@@ -59,7 +59,7 @@ def call_model_rerank_w_scores_batch(prompt, evidences, model, max_new_tokens=15
     results = {}
     if mode != "always_retrieve":
         sampling_params = SamplingParams(
-            temperature=0.0, top_p=1.0, max_tokens=max_new_tokens, logprobs=20)
+            temperature=0.0, top_p=1.0, max_tokens=max_new_tokens, logprobs=32016)
         preds = model.generate([prompt], sampling_params)
         pred_token_ids = preds[0].outputs[0].token_ids
         pred_text = preds[0].outputs[0].text
@@ -90,7 +90,7 @@ def call_model_rerank_w_scores_batch(prompt, evidences, model, max_new_tokens=15
         evidence_augmented_inputs = [prompt + "[Retrieval]<paragraph>{0}\n{1}</paragraph>".format(
             para["title"], para["text"]) for para in evidences]
         sampling_params = SamplingParams(
-            temperature=0.0, top_p=1.0, max_tokens=max_new_tokens, logprobs=20)
+            temperature=0.0, top_p=1.0, max_tokens=max_new_tokens, logprobs=5000)
         preds = model.generate(evidence_augmented_inputs, sampling_params)
 
         relevance_score_dict = {}
