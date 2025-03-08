@@ -222,7 +222,7 @@ def add_bos_eos(x, bos_token_id, eos_token_id):
         x = torch.cat([torch.tensor([bos_token_id]), x.clone().detach(), torch.tensor([eos_token_id])])
     return x
 
-
+"""
 # Used for passage retrieval
 def load_passages(path):
     if not os.path.exists(path):
@@ -242,3 +242,27 @@ def load_passages(path):
                     ex = {"id": row[0], "title": row[2], "text": row[1]}
                     passages.append(ex)
     return passages
+"""
+
+def load_passages(path, limit=None):
+    if not os.path.exists(path):
+        logger.info(f"{path} does not exist")
+        return
+    logger.info(f"Loading passages from: {path}")
+    passages = []
+    with open(path, 'r', encoding='utf-8') as fin:
+        if path.endswith(".jsonl"):
+            for line in fin:
+                passages.append(json.loads(line))
+                if limit is not None and len(passages) >= limit:
+                    break
+        else:
+            reader = csv.reader(fin, delimiter="\t")
+            for row in reader:
+                if row[0] == "id":  # Skip header
+                    continue
+                passages.append({"id": row[0], "title": row[2], "text": row[1]})
+                if limit is not None and len(passages) >= limit:
+                    break
+    return passages
+

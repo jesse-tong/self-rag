@@ -198,8 +198,8 @@ class Retriever:
 
         # load passages
         print("loading passages")
-        all_passages = src.data.load_passages(passages)
-        self.passages = all_passages[:100000] # Load only 150000 first passages
+        all_passages = src.data.load_passages(passages, limit=100000)
+        self.passages = all_passages[:100000] # Load only 100000 first passages
         all_passages = None
         del all_passages
         self.passage_id_map = {x["id"]: x for x in self.passages}
