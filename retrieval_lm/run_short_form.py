@@ -305,12 +305,12 @@ def main():
     if args.dtype is not None:
         model = LLM(model=gpt, download_dir=args.download_dir,
                     dtype=args.dtype, tensor_parallel_size=args.world_size,
-                    gpu_memory_utilization=0.75,
+                    gpu_memory_utilization=0.95,
                     max_model_len=672)
     else:
         model = LLM(model=gpt, download_dir=args.download_dir,
                     dtype=args.dtype, tensor_parallel_size=args.world_size,
-                    gpu_memory_utilization=0.75,
+                    gpu_memory_utilization=0.95,
                     max_model_len=672)
 
     # Get token ids for reflection tokens.
