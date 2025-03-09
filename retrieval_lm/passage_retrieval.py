@@ -189,6 +189,7 @@ class Retriever:
         # index all passages
         input_paths = glob.glob(passages_embeddings)
         input_paths = sorted(input_paths)
+        print('Number of passages: ', len(input_paths))
         embeddings_dir = os.path.dirname(input_paths[0])
         index_path = os.path.join(embeddings_dir, "index.faiss")
         if save_or_load_index and os.path.exists(index_path):
