@@ -90,7 +90,7 @@ class Retriever:
 
         return embeddings.numpy()
 
-    def index_encoded_data(self, index, embedding_files, indexing_batch_size):
+    def index_encoded_data(self, index, embedding_files, indexing_batch_size, embedding_files_count_limit=None):
         allids = []
         allembeddings = np.array([])
         for i, file_path in enumerate(embedding_files):
@@ -102,6 +102,9 @@ class Retriever:
             allids.extend(ids)
             while allembeddings.shape[0] > indexing_batch_size:
                 allembeddings, allids = self.add_embeddings(index, allembeddings, allids, indexing_batch_size)
+            
+            if embedding_files_count_limit != None and i >= embedding_files_count_limit:
+                break
 
         while allembeddings.shape[0] > 0:
             allembeddings, allids = self.add_embeddings(index, allembeddings, allids, indexing_batch_size)
@@ -193,7 +196,7 @@ class Retriever:
         else:
             print(f"Indexing passages from files {input_paths}")
             start_time_indexing = time.time()
-            self.index_encoded_data(self.index, input_paths, 20000)
+            self.index_encoded_data(self.index, input_paths, 20000, 10)
             print(f"Indexing time: {time.time()-start_time_indexing:.1f} s.")
 
         # load passages
