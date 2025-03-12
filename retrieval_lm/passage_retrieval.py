@@ -94,6 +94,8 @@ class Retriever:
         allids = []
         allembeddings = np.array([])
         for i, file_path in enumerate(embedding_files):
+            if embedding_files_count_limit != None and i >= embedding_files_count_limit:
+                break
             print(f"Loading file {file_path}")
             with open(file_path, "rb") as fin:
                 ids, embeddings = pickle.load(fin)
@@ -103,8 +105,7 @@ class Retriever:
             while allembeddings.shape[0] > indexing_batch_size:
                 allembeddings, allids = self.add_embeddings(index, allembeddings, allids, indexing_batch_size)
             
-            if embedding_files_count_limit != None and i >= embedding_files_count_limit:
-                break
+            
 
         while allembeddings.shape[0] > 0:
             allembeddings, allids = self.add_embeddings(index, allembeddings, allids, indexing_batch_size)
@@ -124,7 +125,7 @@ class Retriever:
 
     def add_passages(self, passages, top_passages_and_scores):
         # add passages to original data
-        docs = [passages[doc_id] for doc_id in top_passages_and_scores[0][0]]
+        docs = [passages[doc_id] for doc_id in top_passages_and_scores[0][0] if doc_id in passages]
         return docs
 
     def setup_retriever(self):
@@ -204,7 +205,7 @@ class Retriever:
         # load passages
         print("loading passages")
         all_passages = src.data.load_passages(passages, limit=50000)
-        self.passages = all_passages[:50000] # Load only 100000 first passages
+        self.passages = all_passages[:50000] # Load only 50000 first passages
         all_passages = None
         del all_passages
         self.passage_id_map = {x["id"]: x for x in self.passages}
