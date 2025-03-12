@@ -198,8 +198,8 @@ class Retriever:
         else:
             print(f"Indexing passages from files {input_paths}")
             start_time_indexing = time.time()
-            # Since we have 4 passages in Wikipedia, we just get only one to reduce Kaggle memory usage
-            self.index_encoded_data(self.index, input_paths, 20000, 1)
+            # Since we have 4 passages in Wikipedia, we just get only two passage paths to reduce Kaggle memory usage
+            self.index_encoded_data(self.index, input_paths, 20000, 2)
             print(f"Indexing time: {time.time()-start_time_indexing:.1f} s.")
 
         # load passages
